@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eNull - Profile Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .profile-pic-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .choose-file-button {
+            display: block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .choose-file-button:hover {
+            background-color: #0056b3;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .dialog-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 320px;
+            height: 100%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            z-index: 1000;
+            overflow: auto;
+            box-sizing: border-box;
+        }
+        .dialog-profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ddd;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto 20px;
+        }
+        .dialog-profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .dialog-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .account-link {
+            display: block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .account-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-pic-container">
+        <label class="profile-pic" id="profile-pic">
+            <input type="file" id="file-input">
+            <img src="profile-placeholder.jpg" alt="Profile Picture" id="profile-pic-img">
+        </label>
+        <button class="choose-file-button" onclick="document.getElementById('file-input').click()">Choose File</button>
+    </div>
+
+    <!-- Dialog for Profile Picture -->
+    <div id="profile-dialog" class="dialog-container">
+        <button class="dialog-close" onclick="closeDialog()">X</button>
+        <div class="dialog-profile-pic">
+            <img src="profile-placeholder.jpg" id="dialog-profile-pic" alt="Profile Picture">
+        </div>
+        <a href="https://enull2700.vercel.app/" class="account-link">Go to Account Page</a>
+    </div>
+
+    <script>
+        const profilePic = document.getElementById('profile-pic');
+        const profilePicImg = document.getElementById('profile-pic-img');
+        const dialogProfilePic = document.getElementById('dialog-profile-pic');
+        const profileDialog = document.getElementById('profile-dialog');
+
+        // Load the saved profile picture from localStorage
+        window.onload = function() {
+            const savedPic = localStorage.getItem('profilePic');
+            if (savedPic) {
+                profilePicImg.src = savedPic;
+                dialogProfilePic.src = savedPic;
+            }
+        };
+
+        profilePic.addEventListener('click', function() {
+            profileDialog.style.display = 'block';
+        });
+
+        function closeDialog() {
+            profileDialog.style.display = 'none';
+        }
+
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const result = event.target.result;
+                    profilePicImg.src = result;
+                    dialogProfilePic.src = result;
+                    localStorage.setItem('profilePic', result); // Save to localStorage
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
